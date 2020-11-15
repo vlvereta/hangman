@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hangman</title>
+</head>
+<body>
+	<script type="text/javascript">
+		const blankLetter = '_';
+
+		while (true) {
+			const response = prompt("Select a word and type it here:");
+			if (!response) break;
+
+			const selectedWord = response.toLowerCase().split(' ')[0];
+			console.log('Your word is:', "'" + selectedWord + "'");
+
+			const answerArray = [...Array(selectedWord.length)].map(el => blankLetter);
+			let remainingLetters = selectedWord.length;
+			let attempts = 3;
+
+			while (remainingLetters && attempts) {
+				console.log('Remaining letters: ' + remainingLetters + ', attempts: ' + attempts);
+				alert(answerArray.join(" "));
+
+				const guess = prompt('Guess a letter or click Cancel to stop the round.');
+				if (!guess) {
+					attempts = 0; // the same result as not guessed
+				} else if (guess.length !== 1) {
+					alert('Please, enter a single letter.');
+				} else {
+					let isCurrentLetterGuessed = false;
+
+					for (let i = 0; i < selectedWord.length; i++) {
+						if (selectedWord[i] === guess) {
+							!isCurrentLetterGuessed && (isCurrentLetterGuessed = true);
+
+							if (answerArray[i] !== blankLetter) {
+								alert('Please, don\'t use the same letters!');
+								break;
+							} else {
+								answerArray[i] = guess;
+								remainingLetters--;
+							}
+						}
+					}
+
+					!isCurrentLetterGuessed && attempts--;
+				}
+			}
+
+			const isGuessed = !!attempts;
+			console.log(isGuessed ? 'Guessed!' : 'Not guessed!');
+			alert(`${isGuessed ? 'Good' : 'Bad'} job! The word was: '` + selectedWord + "'");
+
+			const shouldContinue = confirm('Let\'s guess one more word?');
+			if (!shouldContinue) break;
+		}
+		alert('See u next time ;)');
+	</script>
+</body>
+</html>
